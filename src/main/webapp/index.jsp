@@ -41,20 +41,25 @@
       var request = new XMLHttpRequest();
 
       function searchProcess() {
-        //var table = document.getElementById("ajax-table");
         var table = $("#ajax-table")[0];
         table.innerHTML = ""
-        if (request.readyState == 4 && request.status == 200) {
-          var object = eval('(' + request.responseText + ')');
-          var result = object.result;
-          for (var i = 0; i < result.length; i++) {
-            var row = table.insertRow(0);
-            for (var j = 0; j < result[i].length; j++) {
-              var cell = row.insertCell(j);
-              // cell.innerHTML = result[i][j].value;
-              cell.innerHTML = Object.values(result[i][j])[0];
-            }
+        
+        if(request.readyState === 4){
+          if(request.status !== 200){
+            console.error('데이터 로드 실패 : 상태코드', request.status);
+            return;
           }
+          
+          const responseData = JSON.parse(request.responseText);
+          const tableRows = responseData.result;
+          
+          tableRows.forEach(rowData =>{
+            const newRow = table.insertRow(0);
+            rowData.forEach(cellData => {
+              const cell = newRow.insertCell();
+              cell.innerHTML = Object.values(cellData)[0];
+            });
+          });
         }
       }
       
