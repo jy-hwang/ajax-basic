@@ -15,7 +15,6 @@ public class UserDAO {
   private ResultSet rs;
 
   public UserDAO() {
-
     try {
       String dbUrl = System.getProperty("db.url");
       String dbUsername = System.getProperty("db.username");
@@ -26,11 +25,9 @@ public class UserDAO {
     } catch (Exception e) {
       e.printStackTrace();
     }
-
   }
 
   public ArrayList<User> search(String userName) {
-
     String sqlQuery =
         " SELECT user_name AS userName, user_age AS userAge, user_gender AS userGender, user_email AS userEmail FROM users WHERE user_name LIKE ?; ";
     ArrayList<User> userList = new ArrayList<User>();
@@ -55,4 +52,21 @@ public class UserDAO {
     return userList;
   }
 
+  public int register(User user) {
+    String sqlQuery = " INSERT INTO users (user_name, user_age, user_gender, user_email) VALUES (?, ?, ?, ?); ";
+    
+    try {
+      pstmt = conn.prepareStatement(sqlQuery);
+      pstmt.setString(1,  user.getUserName());
+      pstmt.setInt(2,  user.getUserAge());
+      pstmt.setString(3,  user.getUserGender());
+      pstmt.setString(4,  user.getUserEmail());
+      return pstmt.executeUpdate();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    
+    return -1; // 데이터베이스 오류
+  }
+  
 }

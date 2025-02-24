@@ -37,6 +37,48 @@
       </tbody>
     </table>
   </div>
+  <div class="container">
+    <table class="table" style="text-align: center; border: 1px solid #ddd;">
+      <thead>
+        <tr>
+          <th colspan="2" style="background-color:#fafafa; text-align:center;">회원 등록 양식</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="background-color: #fafafa; text-align:center;"><h5>이름</h5></td>
+          <td><input type="text" class="form-control" id="register-name" size="20"/></td>
+        </tr>
+        <tr>
+          <td style="background-color: #fafafa; text-align:center;"><h5>나이</h5></td>
+          <td><input type="number" class="form-control" id="register-age" size="20"/></td>
+        </tr>
+        <tr>
+          <td style="background-color: #fafafa; text-align:center;"><h5>성별</h5></td>
+          <td>
+            <div class="form-group" style="text-align:center; margin : 0 auto;">
+              <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-primary active">
+                  <input type="radio" name="register-gender" autocomplete="off" value="남" checked>남자
+                </label>
+                <label class="btn btn-primary">
+                  <input type="radio" name="register-gender" autocomplete="off" value="여" >여자
+                </label>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style="background-color: #fafafa; text-align:center;"><h5>이메일</h5></td>
+          <td><input type="email" class="form-control" id="register-email" size="20"/></td>
+        </tr>
+        <tr>
+          <td colspan="2"><button type="button" class="btn btn-primary pull-right" onclick="register_function();">등록</button></td>
+        
+        </tr>
+      </tbody>
+    </table>
+  </div>
   <script type="text/javascript">
       var request = new XMLHttpRequest();
 
