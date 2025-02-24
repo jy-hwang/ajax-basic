@@ -14,10 +14,12 @@
   <div class="container">
     <div class="form-group row pull-right">
       <div class="col-xs-8">
-        <input type="text" class="form-control" size="20" />
+        <input type="text" class="form-control" size="20" id="user-name"
+          name="user-name" />
       </div>
       <div class="col-xs-2">
-        <button type="button" class="btn btn-primary">검색</button>
+        <button type="button" class="btn btn-primary"
+          onclick="search_ajax()">검색</button>
       </div>
     </div>
     <table class="table"
@@ -30,15 +32,59 @@
           <th style="background-color: #fafafa; text-align: center">이메일</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td>홍길동</td>
-          <td>36</td>
-          <td>남자</td>
-          <td>hong@gil.dong</td>
-        </tr>
+      <tbody id="ajax-table">
+
       </tbody>
     </table>
   </div>
+  <script type="text/javascript">
+      var request = new XMLHttpRequest();
+
+      function searchProcess() {
+        //var table = document.getElementById("ajax-table");
+        var table = $("#ajax-table")[0];
+        table.innerHTML = ""
+        if (request.readyState == 4 && request.status == 200) {
+          var object = eval('(' + request.responseText + ')');
+          var result = object.result;
+          for (var i = 0; i < result.length; i++) {
+            var row = table.insertRow(0);
+            for (var j = 0; j < result[i].length; j++) {
+              var cell = row.insertCell(j);
+              // cell.innerHTML = result[i][j].value;
+              cell.innerHTML = Object.values(result[i][j])[0];
+            }
+          }
+        }
+      }
+      
+      $(function() {
+        var delay = (function() {
+          var timer = 0;
+
+          return function(callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+          };
+        })();
+
+        $("input:text[name=user-name]").keyup(function() {
+          delay(function() {
+            search_ajax();
+          }, 500);
+        });
+      });
+
+      function search_ajax() {
+        request.open("Post", "./userSearchServlet?userName="
+            + encodeURIComponent($("#user-name").val()), true);
+        request.onreadystatechange = searchProcess;
+        request.send(null);
+      }
+      
+      window.onload = function(){
+        search_ajax();
+      }
+    </script>
 </body>
 </html>
