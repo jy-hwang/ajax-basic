@@ -20,7 +20,6 @@ public class UserSearchServlet extends HttpServlet {
     response.getWriter().write(getJson(userName));
   }
 
-
   public String getJson(String userName) {
 
     if (userName == null) {
@@ -35,14 +34,16 @@ public class UserSearchServlet extends HttpServlet {
     ArrayList<User> userList = userDAO.search(userName);
     // [{"value" : " + userList.get(i).getUserName() + ""}]
     for (int i = 0; i < userList.size(); i++) {
+      if (i > 0) {
+        result.append(",");
+      }
       result.append("[{\"name\" : \"" + userList.get(i).getUserName() + "\"},");
       result.append("{\"age\" : \"" + userList.get(i).getUserAge() + "\"},");
       result.append("{\"gender\" : \"" + userList.get(i).getUserGender() + "\"},");
-      result.append("{\"email\" : \"" + userList.get(i).getUserEmail() + "\"}],");
+      result.append("{\"email\" : \"" + userList.get(i).getUserEmail() + "\"}]");
     }
 
     result.append("]}");
-    System.out.println(result.toString());
     return result.toString();
   }
 

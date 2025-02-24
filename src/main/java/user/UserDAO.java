@@ -20,7 +20,6 @@ public class UserDAO {
       String dbUrl = System.getProperty("db.url");
       String dbUsername = System.getProperty("db.username");
       String dbPassword = System.getProperty("db.password");
-      System.out.println(dbUsername + dbPassword);
       Class.forName("org.mariadb.jdbc.Driver");
       conn = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
 
@@ -33,7 +32,7 @@ public class UserDAO {
   public ArrayList<User> search(String userName) {
 
     String sqlQuery =
-        " SELECT user_name AS userName, user_age AS userAge, user_gender AS userGender, user_email AS user_email  FROM users WHERE user_name LIKE ?; ";
+        " SELECT user_name AS userName, user_age AS userAge, user_gender AS userGender, user_email AS userEmail FROM users WHERE user_name LIKE ?; ";
     ArrayList<User> userList = new ArrayList<User>();
 
     try {
