@@ -69,7 +69,7 @@
           </td>
         </tr>
         <tr>
-          <td style="background-color: #fafafa; text-align:center;"><h5>이메일</h5></td>
+          <td style="background-color: #fafafa; text-align:center;" required><h5>이메일</h5></td>
           <td><input type="email" class="form-control" id="register-email" size="20"/></td>
         </tr>
         <tr>
@@ -80,19 +80,20 @@
     </table>
   </div>
   <script type="text/javascript">
-      var request = new XMLHttpRequest();
+      var searchRequest = new XMLHttpRequest();
+      var registerRequest = new XMLHttpRequest();
 
-      function searchProcess() {
+      function search_process() {
         var table = $("#ajax-table")[0];
         table.innerHTML = ""
         
-        if(request.readyState === 4){
-          if(request.status !== 200){
-            console.error('데이터 로드 실패 : 상태코드', request.status);
+        if(searchRequest.readyState === 4){
+          if(searchRequest.status !== 200){
+            console.error('데이터 로드 실패 : 상태코드', searchRequest.status);
             return;
           }
           
-          const responseData = JSON.parse(request.responseText);
+          const responseData = JSON.parse(searchRequest.responseText);
           const tableRows = responseData.result;
           
           tableRows.forEach(rowData =>{
@@ -123,10 +124,44 @@
       });
 
       function search_ajax() {
-        request.open("Post", "./userSearchServlet?userName="
+        searchRequest.open("Post", "./userSearchServlet?userName="
             + encodeURIComponent($("#user-name").val()), true);
-        request.onreadystatechange = searchProcess;
-        request.send(null);
+        searchRequest.onreadystatechange = search_process;
+        searchRequest.send(null);
+      }
+      
+      function register_function(){
+        registerRequest.open("Post", "./userRegisterServlet?userName="
+            + encodeURIComponent($("#register-name").val())
+            + "&userAge="
+            + encodeURIComponent($("#register-age").val())
+            + "&userGender="
+            + encodeURIComponent($("input[name=register-gender]:checked").val())
+            + "&userEmail="
+            + encodeURIComponent($("#register-email").val())
+            , true);
+        
+            registerRequest.onreadystatechange = register_process;
+            registerRequest.send(null);
+      }
+      
+      function register_process(){
+        if(registerRequest.readyState === 4){
+          if(registerRequest.status !== 200){
+            console.error('데이터 로드 실패 : 상태코드', registerRequest.status);
+            return;
+          }
+          var result = registerRequest.responseText;
+          if(result != 1){
+            alert('등록에 실패했습니다.');
+          } else{
+            var userName = $("#user-name").val('');
+            var registerName = $("#register-name").val('');
+            var registerAge = $("#register-age").val('');
+            var registerEmail = $("#register-email").val('');
+            search_ajax();
+          }
+        }
       }
       
       window.onload = function(){
